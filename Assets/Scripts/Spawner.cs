@@ -16,8 +16,9 @@ public class Spawner : MonoBehaviour
 
     private void InitializeMinMaxPositions()
     {
-        var maxPos = playZone.bounds.max;
-        var minPos = playZone.bounds.min;
+        var zoneBounds = playZone.bounds;
+        var maxPos = zoneBounds.max;
+        var minPos = zoneBounds.min;
         maxSpawnPos = Vector2Int.FloorToInt(maxPos);
         minSpawnPos = Vector2Int.CeilToInt(minPos);
     }

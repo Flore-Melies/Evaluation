@@ -9,7 +9,7 @@ public class SnakeController : MonoBehaviour
     public GameObject gameOverPrefab;
 
     private Vector2Int input;
-    private Vector2Int lastUsedInput;
+    private Vector2Int direction;
     private Rigidbody2D myRigidbody;
     private Transform tail;
     private int eatenFruits;
@@ -32,9 +32,9 @@ public class SnakeController : MonoBehaviour
     {
         while (isAlive)
         {
-            lastUsedInput = input;
+            direction = input;
             var emptySpace = myRigidbody.position;
-            myRigidbody.MovePosition(emptySpace + input);
+            myRigidbody.MovePosition(emptySpace + direction);
             
             yield return new WaitForFixedUpdate();
 
@@ -54,10 +54,10 @@ public class SnakeController : MonoBehaviour
     {
         if (!context.performed)
             return;
-        var rawInput = context.ReadValue<Vector2Int>();
-        var newInput = Vector2Int.RoundToInt(rawInput);
-        if (newInput != lastUsedInput * -1)
-            input = newInput;
+        var floatInput = context.ReadValue<Vector2>();
+        var intInput = Vector2Int.RoundToInt(floatInput);
+        if (intInput != direction * -1)
+            input = intInput;
     }
 
     private void AddTailPart(Vector2 newPartPosition)
@@ -88,8 +88,6 @@ public class SnakeController : MonoBehaviour
 
     private void Die()
     {
-        if (!isAlive)
-            return;
         isAlive = false;
         var gameOver = Instantiate(gameOverPrefab);
         gameOver.GetComponentInChildren<ScoreDisplayer>().SetScore(eatenFruits);
