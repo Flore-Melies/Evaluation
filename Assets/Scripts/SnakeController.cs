@@ -88,6 +88,8 @@ public class SnakeController : MonoBehaviour
 
     private void Die()
     {
+        if(!isAlive)
+            return;
         isAlive = false;
         var gameOver = Instantiate(gameOverPrefab);
         gameOver.GetComponentInChildren<ScoreDisplayer>().SetScore(eatenFruits);
