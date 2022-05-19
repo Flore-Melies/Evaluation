@@ -8,8 +8,8 @@ public class SnakeController : MonoBehaviour
     public GameObject tailPartPrefab;
     public GameObject gameOverPrefab;
 
-    private Vector2Int input;
-    private Vector2Int direction;
+    private Vector2Int currentInput;
+    private Vector2Int lastInput;
     private Rigidbody2D myRigidbody;
     private Transform tail;
     private int eatenFruits;
@@ -24,7 +24,7 @@ public class SnakeController : MonoBehaviour
     private IEnumerator Start()
     {
         tail = new GameObject("Tail").transform;
-        yield return new WaitWhile(() => input == Vector2Int.zero);
+        yield return new WaitWhile(() => currentInput == Vector2Int.zero);
         StartCoroutine(Move());
     }
 
@@ -32,9 +32,9 @@ public class SnakeController : MonoBehaviour
     {
         while (isAlive)
         {
-            direction = input;
+            lastInput = currentInput;
             var emptySpace = myRigidbody.position;
-            myRigidbody.MovePosition(emptySpace + direction);
+            myRigidbody.MovePosition(emptySpace + lastInput);
             
             yield return new WaitForFixedUpdate();
 
@@ -56,8 +56,8 @@ public class SnakeController : MonoBehaviour
             return;
         var floatInput = context.ReadValue<Vector2>();
         var intInput = Vector2Int.RoundToInt(floatInput);
-        if (intInput != direction * -1)
-            input = intInput;
+        if (intInput != lastInput * -1)
+            currentInput = intInput;
     }
 
     private void AddTailPart(Vector2 newPartPosition)
